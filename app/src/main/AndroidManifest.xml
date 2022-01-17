@@ -3,17 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="millich.michael.bordcasttest">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BordcastTest">
+        android:theme="@style/Theme.BordcastTest"
+        tools:ignore="AllowBackup">
         <service
             android:name=".MyTestService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="false" />
 
         <activity
             android:name=".MainActivity"

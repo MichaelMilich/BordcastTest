@@ -25,3 +25,11 @@ const val PREVIEW_COUNT = 1
 const val PREV_COUNT_PREFERENCE = "PREV_COUNT_PREFERENCE"
 
 const val PREV_COUNT_PREFERENCE_DEFAULT_VALUE = 0
+
+const val CHANNEL_ID_1 ="MISHA_CHANNEL_ID_1"
+
+const val CHANNEL_NAME_1 ="MISHA_CHANNEL_NAME_1"
+
+const val CHANNEL_DESCRIPTION_1 ="Channel for my application to show live data"
+
+const val ONGOING_NOTIFICATION_ID=1
