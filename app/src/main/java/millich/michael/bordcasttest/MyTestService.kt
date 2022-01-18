@@ -26,7 +26,7 @@ lateinit var database: UnlockDatabase
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
-        showNotification("MISHA's notification" , "# unlocks")
+        //showNotification("MISHA's notification" , "# unlocks")
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -48,7 +48,7 @@ lateinit var database: UnlockDatabase
             .setContentTitle(title) // title for notification
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true) // clear notification after click
+            .setAutoCancel(false) // clear notification after click
             .build()
 
         mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)

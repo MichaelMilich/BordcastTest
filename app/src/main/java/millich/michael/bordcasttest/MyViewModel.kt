@@ -12,7 +12,8 @@ var count =0
         if(count ==0) {
             count ++
             _intent = Intent(context, MyTestService::class.java)
-            context.startService(_intent)
+            context.startForegroundService(_intent)
+
         }
     }
     fun stop(context: Context){
