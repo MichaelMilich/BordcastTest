@@ -30,6 +30,11 @@ lateinit var database: UnlockDatabase
         return super.onStartCommand(intent, flags, startId)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(UnlockBroadcastReceiver)
+    }
+
     @SuppressLint("UnspecifiedImmutableFlag")
     fun showNotification(title: String, message: String) {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

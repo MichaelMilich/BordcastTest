@@ -12,7 +12,7 @@ var count =0
         if(count ==0) {
             count ++
             _intent = Intent(context, MyTestService::class.java)
-            context.startForegroundService(_intent)
+            context.startService(_intent)
 
         }
     }

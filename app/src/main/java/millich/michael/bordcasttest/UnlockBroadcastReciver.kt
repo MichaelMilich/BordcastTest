@@ -13,85 +13,47 @@
 // limitations under the License.
 package millich.michael.bordcasttest
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
+import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import millich.michael.bordcasttest.databse.UnlockDatabase
 import millich.michael.bordcasttest.databse.UnlockEvent
-import java.time.Instant
-import java.util.*
 
 object UnlockBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        var database = UnlockDatabase.getInstance(context).unlockDatabaseDAO
+        val database = UnlockDatabase.getInstance(context).unlockDatabaseDAO
         val unlockEvent = UnlockEvent()
         runBlocking {
             launch {
                 database.Insert(unlockEvent)
-                 var newUnlock = database.getLastUnlock()
-                Log.i("Test", "Count = ${newUnlock!!.eventId} at MillicsecondTime = ${newUnlock!!.eventTime}")
+                 val newUnlock = database.getLastUnlock()
+                Log.i("Test", "Count = ${newUnlock!!.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
+                showNotification(context,"Unlocks!" ,"Count = ${newUnlock.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
             }
         }
 
+
     }
-
-    private fun SharedPrefencesCode(context: Context, intent: Intent)
-    {
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        if (intent.action == Intent.ACTION_USER_PRESENT) {
-
-
-            val dayEndLong = prefs.getLong(DAY_END_MS_PREFERENCE, 0)
-
-            val now = Date.from(Instant.now())
-            if (now.time > dayEndLong) {
-
-                prefs.getInt(
-                    COUNT_PREFERENCE,
-                    COUNT_PREFERENCE_DEFAULT_VALUE
-                ).also { count ->
-                    prefs.edit().apply {
-                        putInt(PREV_COUNT_PREFERENCE, count)
-                        putInt(COUNT_PREFERENCE, 1)
-                        putLong(
-                            DAY_END_MS_PREFERENCE,
-                            endOfDay(
-                                now
-                            )
-                        )
-                    }.apply()
-                }
-            }
-            else {
-                prefs.getInt(
-                    COUNT_PREFERENCE,
-                    COUNT_PREFERENCE_DEFAULT_VALUE
-                ).also { count ->
-                    prefs.edit().apply {
-                        putInt(PREV_COUNT_PREFERENCE, count)
-                        val newCount = count + 1
-                        Log.i("Test", "Count = $newCount")
-                        putInt(COUNT_PREFERENCE, newCount).apply()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun endOfDay(date: Date): Long {
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 59)
-        calendar.set(Calendar.SECOND, 59)
-        calendar.set(Calendar.MILLISECOND, 999)
-        return calendar.timeInMillis
+    fun showNotification(context: Context, title: String, message: String) {
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val intent = Intent(context,MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID_1)
+            .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
+            .setContentTitle(title) // title for notification
+            .setContentText(message)// message for notification
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setAutoCancel(true) // clear notification after click
+            .build()
+        mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
     }
 }

@@ -32,4 +32,4 @@ const val CHANNEL_NAME_1 ="MISHA_CHANNEL_NAME_1"
 
 const val CHANNEL_DESCRIPTION_1 ="Channel for my application to show live data"
 
-const val ONGOING_NOTIFICATION_ID=1
+const val ONGOING_NOTIFICATION_ID=1234

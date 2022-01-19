@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.start(applicationContext)
-        showNotification("MISHA's notification" , "# unlocks")
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID_1)
-            .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+            .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
             .setContentTitle(title) // title for notification
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
