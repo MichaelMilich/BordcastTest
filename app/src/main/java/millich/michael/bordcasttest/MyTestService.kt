@@ -1,6 +1,7 @@
 package millich.michael.bordcasttest
 
 import android.annotation.SuppressLint
+import android.app.Notification.FOREGROUND_SERVICE_IMMEDIATE
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,6 +11,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class MyTestService : Service() {
@@ -25,18 +28,18 @@ lateinit var database: UnlockDatabase
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
-        //showNotification("MISHA's notification" , "# unlocks")
+        showNotificationAndStartForeground("MISHA's notification" , "# unlocks")
+        //registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(UnlockBroadcastReceiver)
+        //unregisterReceiver(UnlockBroadcastReceiver)
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    fun showNotification(title: String, message: String) {
+    fun showNotificationAndStartForeground(title: String, message: String) {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID_1,
@@ -46,16 +49,17 @@ lateinit var database: UnlockDatabase
         mNotificationManager.createNotificationChannel(channel)
 
         val intent = Intent(applicationContext, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID_1)
-            .setSmallIcon(R.mipmap.ic_launcher) // notification icon
+            .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
             .setContentTitle(title) // title for notification
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
-            .setAutoCancel(false) // clear notification after click
+            .setAutoCancel(true)
             .build()
 
-        mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
+        //mNotificationManager.notify(ONGOING_NOTIFICATION_ID,notification)
+        startForeground(ONGOING_NOTIFICATION_ID,notification)
     }
 }

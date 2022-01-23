@@ -8,12 +8,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MyViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,28 +30,26 @@ class MainActivity : AppCompatActivity() {
         channel.description = CHANNEL_DESCRIPTION_1
         mNotificationManager.createNotificationChannel(channel)
 
+        val btnStartService = findViewById<Button>(R.id.buttonStartService)
+        btnStartService.setOnClickListener {
+            Snackbar.make(this,it,"Made start",Snackbar.LENGTH_SHORT).show()
+            startFunction()
+        }
+        val btnStopService  = findViewById<Button>(R.id.buttonStopService)
+        btnStopService.setOnClickListener {
+            Snackbar.make(this,it,"Made stop",Snackbar.LENGTH_SHORT).show()
+            stopFunction() }
+
     }
 
-    override fun onStart() {
-        super.onStart()
+    private fun startFunction()
+    {
         viewModel.start(applicationContext)
     }
 
-    @SuppressLint("UnspecifiedImmutableFlag")
-    fun showNotification(title: String, message: String) {
-        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID_1)
-            .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
-            .setContentTitle(title) // title for notification
-            .setContentText(message)// message for notification
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true) // clear notification after click
-            .build()
-
-        mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
+    private fun stopFunction()
+    {
+        viewModel.stop(applicationContext)
     }
+
 }

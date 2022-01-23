@@ -36,7 +36,7 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
                 database.Insert(unlockEvent)
                  val newUnlock = database.getLastUnlock()
                 Log.i("Test", "Count = ${newUnlock!!.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
-                showNotification(context,"Unlocks!" ,"Count = ${newUnlock.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
+               showNotification(context,"Unlocks!" ,"Count = ${newUnlock.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
             }
         }
 
@@ -52,7 +52,7 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true) // clear notification after click
+            .setAutoCancel(false) // clear notification after click
             .build()
         mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
     }
