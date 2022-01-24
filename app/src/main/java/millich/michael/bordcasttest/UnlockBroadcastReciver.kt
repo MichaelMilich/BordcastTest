@@ -42,7 +42,7 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
 
 
     }
-    fun showNotification(context: Context, title: String, message: String) {
+    private fun showNotification(context: Context, title: String, message: String) {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(context,MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

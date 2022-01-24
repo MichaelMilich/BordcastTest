@@ -29,13 +29,13 @@ lateinit var database: UnlockDatabase
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         showNotificationAndStartForeground("MISHA's notification" , "# unlocks")
-        //registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+        registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        //unregisterReceiver(UnlockBroadcastReceiver)
+        unregisterReceiver(UnlockBroadcastReceiver)
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -59,7 +59,7 @@ lateinit var database: UnlockDatabase
             .setAutoCancel(true)
             .build()
 
-        //mNotificationManager.notify(ONGOING_NOTIFICATION_ID,notification)
-        startForeground(ONGOING_NOTIFICATION_ID,notification)
+        mNotificationManager.notify(ONGOING_NOTIFICATION_ID,notification)
+        //startForeground(ONGOING_NOTIFICATION_ID,notification)
     }
 }

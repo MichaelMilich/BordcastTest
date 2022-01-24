@@ -13,19 +13,6 @@
 // limitations under the License.
 package millich.michael.bordcasttest
 
-
-const val DAY_END_MS_PREFERENCE = "DAY_END_MS_PREFERENCE"
-
-const val COUNT_PREFERENCE = "COUNT_PREFERENCE"
-
-const val COUNT_PREFERENCE_DEFAULT_VALUE = 0
-
-const val PREVIEW_COUNT = 1
-
-const val PREV_COUNT_PREFERENCE = "PREV_COUNT_PREFERENCE"
-
-const val PREV_COUNT_PREFERENCE_DEFAULT_VALUE = 0
-
 const val CHANNEL_ID_1 ="MISHA_CHANNEL_ID_1"
 
 const val CHANNEL_NAME_1 ="MISHA_CHANNEL_NAME_1"
@@ -33,3 +20,7 @@ const val CHANNEL_NAME_1 ="MISHA_CHANNEL_NAME_1"
 const val CHANNEL_DESCRIPTION_1 ="Channel for my application to show live data"
 
 const val ONGOING_NOTIFICATION_ID=1234
+
+const val STOP_MY_SERVICE="STOP_MY_SERVICE"
+
+const val START_MY_SERVICE="START_MY_SERVICE"
