@@ -9,36 +9,28 @@
     <Button
         android:id="@+id/buttonStartService"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_height="63dp"
+        android:layout_margin="@dimen/buttons_margin"
         android:background="@color/teal_200"
         android:padding="16dp"
-        android:text="Start Service"
+        android:text="@string/start_service"
         android:textColor="#fff"
-        app:layout_constraintBottom_toTopOf="@+id/buttonStopService"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/buttonStopService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="@dimen/buttons_margin"
+        android:layout_marginStart="44dp"
         android:background="@color/purple_500"
         android:padding="16dp"
-        android:text="Stop Service"
+        android:text="@string/stop_service"
         android:textColor="#fff"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonStartService"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonStartService"
-        app:layout_constraintVertical_bias="0.218" />
+        app:layout_constraintStart_toEndOf="@+id/buttonStartService"
+        app:layout_constraintTop_toTopOf="@+id/buttonStartService" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

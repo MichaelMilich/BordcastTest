@@ -42,6 +42,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        startFunction()
+        super.onStart()
+    }
+
     private fun startFunction()
     {
         viewModel.start(applicationContext)

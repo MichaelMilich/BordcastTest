@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -17,6 +18,7 @@ import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class MyTestService : Service() {
 lateinit var database: UnlockDatabase
+private var isServiceRunning =false // if the service is already running, don't create another broadcast receiver and don't show new notifications
     override fun onBind(intent: Intent): IBinder {
         TODO("Return the communication channel to the service.")
     }
@@ -25,17 +27,32 @@ lateinit var database: UnlockDatabase
         super.onCreate()
         val application = requireNotNull(this).application
         database = UnlockDatabase.getInstance(application)
+        isServiceRunning=false
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if(STOP_MY_SERVICE == intent!!.action)
+        {
+            Log.i("Test", "Called to stop the service")
+            val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.cancel(ONGOING_NOTIFICATION_ID)
+            stopSelf()
+        }
+
+        if(isServiceRunning)
+            return super.onStartCommand(intent, flags, startId)
+
         showNotificationAndStartForeground("MISHA's notification" , "# unlocks")
         registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+        isServiceRunning=true
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        isServiceRunning=false
+        stopForeground(true)
         unregisterReceiver(UnlockBroadcastReceiver)
+        super.onDestroy()
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
@@ -51,15 +68,18 @@ lateinit var database: UnlockDatabase
         val intent = Intent(applicationContext, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        val stopIntent = Intent(applicationContext, MyTestService::class.java)
+        stopIntent.action=STOP_MY_SERVICE
+        val pendingStopIntent = PendingIntent.getService(applicationContext,0,stopIntent,PendingIntent.FLAG_CANCEL_CURRENT)
+
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID_1)
             .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
             .setContentTitle(title) // title for notification
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+            .addAction(R.drawable.ic_launcher_background,applicationContext.resources.getString(R.string.stop_service),pendingStopIntent)
             .build()
 
-        mNotificationManager.notify(ONGOING_NOTIFICATION_ID,notification)
-        //startForeground(ONGOING_NOTIFICATION_ID,notification)
+        startForeground(ONGOING_NOTIFICATION_ID,notification)
     }
 }

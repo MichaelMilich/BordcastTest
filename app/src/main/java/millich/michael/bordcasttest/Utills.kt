@@ -13,6 +13,10 @@
 // limitations under the License.
 package millich.michael.bordcasttest
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+
 const val CHANNEL_ID_1 ="MISHA_CHANNEL_ID_1"
 
 const val CHANNEL_NAME_1 ="MISHA_CHANNEL_NAME_1"
@@ -24,3 +28,11 @@ const val ONGOING_NOTIFICATION_ID=1234
 const val STOP_MY_SERVICE="STOP_MY_SERVICE"
 
 const val START_MY_SERVICE="START_MY_SERVICE"
+
+fun formatDateFromMillisecondsLong( long: Long) :String
+{
+    val simpleDateFormat = SimpleDateFormat("HH:mm:ss")
+    simpleDateFormat.timeZone = TimeZone.getDefault()
+    val date = Date(long)
+    return simpleDateFormat.format(date)
+}

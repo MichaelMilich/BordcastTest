@@ -18,6 +18,7 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
@@ -28,6 +29,7 @@ import millich.michael.bordcasttest.databse.UnlockEvent
 
 object UnlockBroadcastReceiver : BroadcastReceiver() {
 
+
     override fun onReceive(context: Context, intent: Intent) {
         val database = UnlockDatabase.getInstance(context).unlockDatabaseDAO
         val unlockEvent = UnlockEvent()
@@ -35,8 +37,8 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
             launch {
                 database.Insert(unlockEvent)
                  val newUnlock = database.getLastUnlock()
-                Log.i("Test", "Count = ${newUnlock!!.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
-               showNotification(context,"Unlocks!" ,"Count = ${newUnlock.eventId} at MillicsecondTime = ${newUnlock.eventTime}")
+                Log.i("Test", "Count = ${newUnlock!!.eventId} at Time = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
+               showNotification(context," ${newUnlock.eventId} Unlocks!" ,"Count = ${newUnlock.eventId} at Time = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
             }
         }
 
@@ -46,13 +48,18 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val intent = Intent(context,MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val stopIntent = Intent(context, MyTestService::class.java)
+        stopIntent.action=STOP_MY_SERVICE
+        val pendingStopIntent = PendingIntent.getService(context,0,stopIntent,PendingIntent.FLAG_CANCEL_CURRENT)
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_1)
             .setSmallIcon(R.drawable.ic_launcher_background) // notification icon
             .setContentTitle(title) // title for notification
             .setContentText(message)// message for notification
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(false) // clear notification after click
+            .addAction(R.drawable.ic_launcher_background,context.resources.getString(R.string.stop_service),pendingStopIntent)
             .build()
         mNotificationManager.notify(ONGOING_NOTIFICATION_ID, notification)
     }
