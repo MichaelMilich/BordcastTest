@@ -11,19 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package millich.michael.bordcasttest
+package millich.michael.bordcasttest.background
 
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import millich.michael.bordcasttest.MainActivity
+import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databse.UnlockDatabase
 import millich.michael.bordcasttest.databse.UnlockEvent
 
@@ -46,11 +46,11 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
     }
     private fun showNotification(context: Context, title: String, message: String) {
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val intent = Intent(context,MainActivity::class.java)
+        val intent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val stopIntent = Intent(context, MyTestService::class.java)
-        stopIntent.action=STOP_MY_SERVICE
+        stopIntent.action= STOP_MY_SERVICE
         val pendingStopIntent = PendingIntent.getService(context,0,stopIntent,PendingIntent.FLAG_CANCEL_CURRENT)
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID_1)

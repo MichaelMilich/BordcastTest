@@ -1,7 +1,6 @@
-package millich.michael.bordcasttest
+package millich.michael.bordcasttest.background
 
 import android.annotation.SuppressLint
-import android.app.Notification.FOREGROUND_SERVICE_IMMEDIATE
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,6 +13,8 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import millich.michael.bordcasttest.MainActivity
+import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class MyTestService : Service() {
@@ -69,7 +70,7 @@ private var isServiceRunning =false // if the service is already running, don't 
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         val stopIntent = Intent(applicationContext, MyTestService::class.java)
-        stopIntent.action=STOP_MY_SERVICE
+        stopIntent.action= STOP_MY_SERVICE
         val pendingStopIntent = PendingIntent.getService(applicationContext,0,stopIntent,PendingIntent.FLAG_CANCEL_CURRENT)
 
         val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID_1)
