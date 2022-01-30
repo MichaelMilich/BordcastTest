@@ -25,9 +25,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val buttonVisible : LiveData<Boolean>
     get() = _buttonsVisible
 
-    init {
-        _buttonsVisible.value=false
-    }
+
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var mService :MyTestService
@@ -49,6 +47,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    init {
+        _buttonsVisible.value=false
+        start()
+    }
     fun start(){
         _buttonsVisible.value=true
         _intent = Intent(context, MyTestService::class.java)
