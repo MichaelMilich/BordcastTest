@@ -13,6 +13,9 @@
 // limitations under the License.
 package millich.michael.bordcasttest.background
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import millich.michael.bordcasttest.databse.UnlockEvent
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -36,3 +39,19 @@ fun formatDateFromMillisecondsLong( long: Long) :String
     val date = Date(long)
     return simpleDateFormat.format(date)
 }
+fun getCurrentDateInMilli() : Long{
+    var today = Calendar.getInstance()
+    today.set(Calendar.MILLISECOND,0)
+    today.set(Calendar.SECOND,0)
+    today.set(Calendar.MINUTE,0)
+    today.set(Calendar.HOUR_OF_DAY,0)
+    Log.i("Test", "Today in Milliseconds is ${today.timeInMillis}")
+    return today.timeInMillis
+}
+
+/*
+fun getUnlockCountToday(unlocksToday: LiveData<List<UnlockEvent>>) : Int
+{
+
+}
+*/

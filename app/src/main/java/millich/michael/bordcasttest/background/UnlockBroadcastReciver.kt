@@ -29,7 +29,6 @@ import millich.michael.bordcasttest.databse.UnlockEvent
 
 object UnlockBroadcastReceiver : BroadcastReceiver() {
 
-
     override fun onReceive(context: Context, intent: Intent) {
         val database = UnlockDatabase.getInstance(context).unlockDatabaseDAO
         val unlockEvent = UnlockEvent()
@@ -37,8 +36,10 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
             launch {
                 database.Insert(unlockEvent)
                  val newUnlock = database.getLastUnlock()
-                Log.i("Test", "Count = ${newUnlock!!.eventId} at Time = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
-               showNotification(context," ${newUnlock.eventId} Unlocks!" ,"Count = ${newUnlock.eventId} at Time = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
+                val unlockCount =database.getTodayUnlocksCountAfterTime(getCurrentDateInMilli())
+                Log.i("Test", " ${newUnlock!!.eventId}  unlocks today , last time at = ${formatDateFromMillisecondsLong(
+                    newUnlock.eventTime)}")
+               showNotification(context," ${newUnlock.eventId}   today" ,"last time at = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
             }
         }
 

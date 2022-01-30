@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databinding.HomeFragmentBinding
+import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class HomeFragment : Fragment() {
 
@@ -29,7 +30,8 @@ class HomeFragment : Fragment() {
             false
         )
         val application = requireNotNull(this.activity).application
-        val viewModelFactory = HomeViewModelFactory(application)
+        val databaseDAO = UnlockDatabase.getInstance(application).unlockDatabaseDAO
+        val viewModelFactory = HomeViewModelFactory(application,databaseDAO)
         val viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
         binding.viewModelTest=viewModel
         binding.buttonStartService.setOnClickListener{

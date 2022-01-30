@@ -14,9 +14,12 @@ import androidx.lifecycle.Transformations
 import millich.michael.bordcasttest.background.MyTestService
 import millich.michael.bordcasttest.background.START_MY_SERVICE
 import millich.michael.bordcasttest.background.STOP_MY_SERVICE
+import millich.michael.bordcasttest.background.getCurrentDateInMilli
 import millich.michael.bordcasttest.databse.UnlockDatabaseDAO
+import millich.michael.bordcasttest.databse.UnlockEvent
+import java.util.*
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : AndroidViewModel(application) {
     lateinit var _intent : Intent
     @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
@@ -25,7 +28,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val buttonVisible : LiveData<Boolean>
     get() = _buttonsVisible
 
-
+    private val _unlockCount = database.getTodayUnlocksCountAfterTime(getCurrentDateInMilli())
+    val unlockCount : LiveData<Int>
+        get() {
+            return  _unlockCount
+        }
 
     @SuppressLint("StaticFieldLeak")
     private lateinit var mService :MyTestService
@@ -65,12 +72,8 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         _intent.action = STOP_MY_SERVICE
         context.stopService(_intent)
     }
-    private var _showSnackbarEvent = MutableLiveData<Boolean>()
 
-    /**
-     * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
-     */
-    val showSnackBarEvent: LiveData<Boolean>
-        get() = _showSnackbarEvent
+
+
 
 }
