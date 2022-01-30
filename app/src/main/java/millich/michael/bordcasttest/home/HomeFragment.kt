@@ -45,6 +45,9 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //viewModel start the service automaticaly once the view was created
+        super.onViewCreated(view, savedInstanceState)
+    }
 
 }

@@ -8,6 +8,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -18,10 +19,16 @@ import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databse.UnlockDatabase
 
 class MyTestService : Service() {
+
+inner class LocalBinder : Binder() {
+   fun getService() : MyTestService =this@MyTestService
+}
+private val binder = LocalBinder()
+
 lateinit var database: UnlockDatabase
-private var isServiceRunning =false // if the service is already running, don't create another broadcast receiver and don't show new notifications
+var isServiceRunning =false // if the service is already running, don't create another broadcast receiver and don't show new notifications
     override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+        return binder
     }
 
     override fun onCreate() {
