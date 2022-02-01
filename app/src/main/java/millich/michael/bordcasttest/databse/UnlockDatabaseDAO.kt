@@ -55,15 +55,15 @@ interface UnlockDatabaseDAO {
      * Selects and returns an unlock event with given eventId.
      */
     @Query("SELECT * from unlock_event_table WHERE eventId = :key")
-    fun getUnlockEventWithId(key: Long): LiveData<UnlockEvent>
+     fun getUnlockEventWithId(key: Long): LiveData<UnlockEvent>
 
     @Query("SELECT * from unlock_event_table WHERE event_time_milli > :event ORDER BY eventId")
-    fun getUnlocksAfterTime(event : Long) : LiveData<List<UnlockEvent>>
+     fun getUnlocksAfterTime(event : Long) : LiveData<List<UnlockEvent>>
 
     @Query("SELECT COUNT(*) from  unlock_event_table WHERE event_time_milli > :event ")
-    fun getTodayUnlocksCountAfterTime(event: Long) : LiveData<Int>
+     fun getTodayUnlocksCountAfterTime(event: Long) : LiveData<Int>
 
     @Query("SELECT COUNT(*) from  unlock_event_table WHERE event_time_milli > :event ")
-    fun getTodayUnlocksCountAfterTimeNoLiveData(event: Long) : Int
+    suspend fun getTodayUnlocksCountAfterTimeNoLiveData(event: Long) : Int
 
 }

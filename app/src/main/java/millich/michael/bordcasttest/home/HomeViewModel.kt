@@ -11,10 +11,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import millich.michael.bordcasttest.background.MyTestService
-import millich.michael.bordcasttest.background.START_MY_SERVICE
-import millich.michael.bordcasttest.background.STOP_MY_SERVICE
-import millich.michael.bordcasttest.background.getCurrentDateInMilli
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import millich.michael.bordcasttest.background.*
 import millich.michael.bordcasttest.databse.UnlockDatabaseDAO
 import millich.michael.bordcasttest.databse.UnlockEvent
 import java.util.*
@@ -28,14 +27,14 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
     val buttonVisible : LiveData<Boolean>
     get() = _buttonsVisible
 
-    private val _unlockCount = database.getTodayUnlocksCountAfterTime(getCurrentDateInMilli())
+    private val _unlockCount =  database.getTodayUnlocksCountAfterTime(getCurrentDateInMilli())
     val unlockCount : LiveData<Int>
         get() {
             return  _unlockCount
         }
 
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var mService :MyTestService
+    //@SuppressLint("StaticFieldLeak")
+    //private lateinit var mService :MyTestService
 
     /** Defines callbacks for service binding, passed to bindService()  */
     private val connection = object : ServiceConnection {
@@ -44,7 +43,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
             // We've bound to LocalService, cast the IBinder and get LocalService instance
             Log.i("HomeViewModel","Bounded to service")
             val binder = service as MyTestService.LocalBinder
-            mService = binder.getService()
+            //mService = binder.getService()
             _buttonsVisible.value=true
         }
 

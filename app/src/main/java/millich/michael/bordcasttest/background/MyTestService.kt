@@ -17,6 +17,7 @@ import kotlinx.coroutines.runBlocking
 import millich.michael.bordcasttest.MainActivity
 import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databse.UnlockDatabase
+import millich.michael.bordcasttest.databse.UnlockDatabaseDAO
 
 class MyTestService : Service() {
 
@@ -25,7 +26,7 @@ inner class LocalBinder : Binder() {
 }
 private val binder = LocalBinder()
 
-lateinit var database: UnlockDatabase
+lateinit var database: UnlockDatabaseDAO
 var isServiceRunning =false // if the service is already running, don't create another broadcast receiver and don't show new notifications
     override fun onBind(intent: Intent): IBinder {
         return binder
@@ -34,7 +35,7 @@ var isServiceRunning =false // if the service is already running, don't create a
     override fun onCreate() {
         super.onCreate()
         val application = requireNotNull(this).application
-        database = UnlockDatabase.getInstance(application)
+        database = UnlockDatabase.getInstance(application).unlockDatabaseDAO
         isServiceRunning=false
     }
 
@@ -50,7 +51,11 @@ var isServiceRunning =false // if the service is already running, don't create a
         if(isServiceRunning)
             return super.onStartCommand(intent, flags, startId)
 
-        showNotificationAndStartForeground("MISHA's notification" , "# unlocks")
+        runBlocking { launch {
+            val unlockCount =database.getTodayUnlocksCountAfterTimeNoLiveData(getCurrentDateInMilli())
+            showNotificationAndStartForeground(" $unlockCount  unlocks today" , "")
+        } }
+
         registerReceiver(UnlockBroadcastReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
         isServiceRunning=true
         return super.onStartCommand(intent, flags, startId)
@@ -64,7 +69,7 @@ var isServiceRunning =false // if the service is already running, don't create a
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    fun showNotificationAndStartForeground(title: String, message: String) {
+    suspend fun showNotificationAndStartForeground(title: String, message: String) {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID_1,
