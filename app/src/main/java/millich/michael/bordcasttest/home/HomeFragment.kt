@@ -1,11 +1,15 @@
 package millich.michael.bordcasttest.home
 
+import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import millich.michael.bordcasttest.R
@@ -42,6 +46,23 @@ class HomeFragment : Fragment() {
             this.context?.let { it1 -> Snackbar.make(it1,it,"Made stop",Snackbar.LENGTH_SHORT).show() }
             viewModel.stop()
         }
+
+        val testImageView: ImageView = ImageView(context)
+        testImageView.setImageResource(R.drawable.ic_dot)
+        testImageView.id = R.drawable.ic_dot+20
+
+        val imageParameters : ConstraintLayout.LayoutParams = ConstraintLayout.LayoutParams(40,40)
+        testImageView.layoutParams = imageParameters
+        binding.constraintLayout.addView(testImageView)
+
+        val constraintSet : ConstraintSet = ConstraintSet()
+        constraintSet.clone(binding.constraintLayout)
+        constraintSet.connect(testImageView.id,ConstraintSet.START,binding.analogClockView.id,ConstraintSet.START)
+        constraintSet.connect(testImageView.id,ConstraintSet.END,binding.analogClockView.id,ConstraintSet.END)
+        constraintSet.connect(testImageView.id,ConstraintSet.TOP,binding.analogClockView.id,ConstraintSet.TOP)
+        constraintSet.connect(testImageView.id,ConstraintSet.BOTTOM,binding.analogClockView.id,ConstraintSet.BOTTOM)
+        constraintSet.applyTo(binding.constraintLayout)
+
 
         binding.lifecycleOwner = this
         return binding.root

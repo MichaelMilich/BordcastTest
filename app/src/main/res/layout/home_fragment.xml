@@ -11,7 +11,8 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/constraint_layout">
         <Button
             android:id="@+id/button_start_service"
             android:layout_width="wrap_content"
@@ -51,6 +52,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/analog_clock_view"
+            android:layout_width="323dp"
+            android:layout_height="364dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_start_service"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_analog_clock_0_12"
+            android:contentDescription="@string/analog_clock_content_description" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
