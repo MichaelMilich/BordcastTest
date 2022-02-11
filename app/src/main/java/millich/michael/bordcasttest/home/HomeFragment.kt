@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
@@ -15,6 +17,8 @@ import com.google.android.material.snackbar.Snackbar
 import millich.michael.bordcasttest.R
 import millich.michael.bordcasttest.databinding.HomeFragmentBinding
 import millich.michael.bordcasttest.databse.UnlockDatabase
+import kotlin.math.cos
+import kotlin.math.sin
 
 class HomeFragment : Fragment() {
 
@@ -51,17 +55,28 @@ class HomeFragment : Fragment() {
         testImageView.setImageResource(R.drawable.ic_dot)
         testImageView.id = R.drawable.ic_dot+20
 
-        val imageParameters : ConstraintLayout.LayoutParams = ConstraintLayout.LayoutParams(40,40)
+        val r : Float =  (binding.analogClockView.width).toFloat()
+        val angle = 45f
+        val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
+        imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
+        testImageView.viewTreeObserver.addOnGlobalLayoutListener {
+            ViewTreeObserver.OnGlobalLayoutListener {
+                
+            }
+        }
         testImageView.layoutParams = imageParameters
-        binding.constraintLayout.addView(testImageView)
+        testImageView.translationX = r * sin(angle)
+        testImageView.translationY = -r * cos(angle)
+        testImageView.rotation = angle
+        binding.relativeLayoutTest.addView(testImageView)
 
-        val constraintSet : ConstraintSet = ConstraintSet()
+        /*val constraintSet : ConstraintSet = ConstraintSet()
         constraintSet.clone(binding.constraintLayout)
         constraintSet.connect(testImageView.id,ConstraintSet.START,binding.analogClockView.id,ConstraintSet.START)
         constraintSet.connect(testImageView.id,ConstraintSet.END,binding.analogClockView.id,ConstraintSet.END)
         constraintSet.connect(testImageView.id,ConstraintSet.TOP,binding.analogClockView.id,ConstraintSet.TOP)
         constraintSet.connect(testImageView.id,ConstraintSet.BOTTOM,binding.analogClockView.id,ConstraintSet.BOTTOM)
-        constraintSet.applyTo(binding.constraintLayout)
+        constraintSet.applyTo(binding.constraintLayout)*/
 
 
         binding.lifecycleOwner = this

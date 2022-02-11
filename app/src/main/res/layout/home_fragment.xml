@@ -42,28 +42,44 @@
             app:layout_constraintStart_toEndOf="@+id/button_start_service"
             app:layout_constraintTop_toTopOf="@+id/button_start_service" />
 
-        <TextView
-            android:id="@+id/unlock_count_text_box"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{viewModelTest.unlockCount.toString()}"
-            android:textSize="40sp"
-            app:layout_constraintBottom_toTopOf="@+id/button_start_service"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/analog_clock_view"
-            android:layout_width="323dp"
-            android:layout_height="364dp"
+        <RelativeLayout
+            android:id="@+id/relative_layout_test"
+            android:layout_width="311dp"
+            android:layout_height="375dp"
+            android:background="#B7983A"
             app:layout_constraintBottom_toTopOf="@+id/button_start_service"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_analog_clock_0_12"
-            android:contentDescription="@string/analog_clock_content_description" />
+            app:layout_constraintVertical_bias="0.45">
 
+            <ImageView
+                android:id="@+id/analog_clock_view"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerInParent="true"
+                android:contentDescription="@string/analog_clock_content_description"
+                app:srcCompat="@drawable/ic_analog_clock_0_12" />
+
+            <TextView
+                android:id="@+id/unlock_count_text_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@{viewModelTest.unlockCount.toString()}"
+                android:textSize="40sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerInParent="true"
+                android:rotation="30"
+                android:translationX="77.75dp"
+                android:translationY="-134.666dp"
+                app:srcCompat="@drawable/ic_dot" />
+
+        </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
