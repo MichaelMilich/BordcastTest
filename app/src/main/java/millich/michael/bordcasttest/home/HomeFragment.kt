@@ -58,13 +58,13 @@ class HomeFragment : Fragment() {
         val scale = context?.resources?.displayMetrics?.density ?:0f
         val r : Float =  (311/2) *scale +0.5f
         val angle1 =330f
-        val angle = ((angle1) *0.017453).toFloat()
+        val angle = ((90-angle1) *0.017453).toFloat()
         val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
         imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
         testImageView.layoutParams = imageParameters
         testImageView.translationX = r * cos(angle)
         testImageView.translationY = -r * sin(angle)
-        testImageView.rotation = 90 - angle1
+        testImageView.rotation =  angle1
         binding.relativeLayoutTest.addView(testImageView)
 
         /*val constraintSet : ConstraintSet = ConstraintSet()
