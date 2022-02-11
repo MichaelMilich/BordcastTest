@@ -55,19 +55,16 @@ class HomeFragment : Fragment() {
         testImageView.setImageResource(R.drawable.ic_dot)
         testImageView.id = R.drawable.ic_dot+20
 
-        val r : Float =  (binding.analogClockView.width).toFloat()
-        val angle = 45f
+        val scale = context?.resources?.displayMetrics?.density ?:0f
+        val r : Float =  (311/2) *scale +0.5f
+        val angle1 =330f
+        val angle = ((angle1) *0.017453).toFloat()
         val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
         imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
-        testImageView.viewTreeObserver.addOnGlobalLayoutListener {
-            ViewTreeObserver.OnGlobalLayoutListener {
-                
-            }
-        }
         testImageView.layoutParams = imageParameters
-        testImageView.translationX = r * sin(angle)
-        testImageView.translationY = -r * cos(angle)
-        testImageView.rotation = angle
+        testImageView.translationX = r * cos(angle)
+        testImageView.translationY = -r * sin(angle)
+        testImageView.rotation = 90 - angle1
         binding.relativeLayoutTest.addView(testImageView)
 
         /*val constraintSet : ConstraintSet = ConstraintSet()
