@@ -66,4 +66,6 @@ interface UnlockDatabaseDAO {
     @Query("SELECT COUNT(*) from  unlock_event_table WHERE event_time_milli > :event ")
     suspend fun getTodayUnlocksCountAfterTimeNoLiveData(event: Long) : Int
 
+    @Query("SELECT * FROM unlock_event_table WHERE event_time_milli > :time ORDER BY eventId DESC")
+    fun getAllUnlcoksFromTime(time : Long): LiveData<List<UnlockEvent>>
 }

@@ -14,9 +14,6 @@
 package millich.michael.bordcasttest.background
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import millich.michael.bordcasttest.databse.UnlockEvent
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,13 +37,53 @@ fun formatDateFromMillisecondsLong( long: Long) :String
     return simpleDateFormat.format(date)
 }
 fun getCurrentDateInMilli() : Long{
-    var today = Calendar.getInstance()
+    val today = Calendar.getInstance()
     today.set(Calendar.MILLISECOND,0)
     today.set(Calendar.SECOND,0)
     today.set(Calendar.MINUTE,0)
     today.set(Calendar.HOUR_OF_DAY,0)
-    Log.i("Test", "Today in Milliseconds is ${today.timeInMillis}")
     return today.timeInMillis
+}
+fun getToday12AmInMilli() : Long{
+    val today = Calendar.getInstance()
+    today.set(Calendar.MILLISECOND,0)
+    today.set(Calendar.SECOND,0)
+    today.set(Calendar.MINUTE,0)
+    today.set(Calendar.HOUR_OF_DAY,12)
+    return today.timeInMillis
+}
+fun getTodayEndInMilli() : Long{
+    val today = Calendar.getInstance()
+    today.set(Calendar.MILLISECOND,99)
+    today.set(Calendar.SECOND,59)
+    today.set(Calendar.MINUTE,59)
+    today.set(Calendar.HOUR_OF_DAY,23)
+    return (today.timeInMillis+1)
+}
+
+/**
+ * This function works only for time tags that are within this date.
+ * If we set timeTag to be larger than this dates end, the angle is 0.
+ * otherwise this function calculates the relative angle the visual tag should be placed at in respect to the 12 am and the 24pm analog clocks
+ */
+fun calculateAngle(timeTag :Long) : Float {
+    val dayEnd = getTodayEndInMilli()
+    if (timeTag > dayEnd)
+        return 0f
+
+    val _12am = getToday12AmInMilli()
+    val _0am = getCurrentDateInMilli()
+    val _12hoursInMilli = (_12am - _0am).toFloat()
+    var timeDelta =(timeTag - _12am).toFloat()
+    var angle = 0f
+    if (timeDelta > 0) {
+        angle = ((timeDelta/_12hoursInMilli)*360)
+    }
+    else{
+        timeDelta = (timeTag - _0am).toFloat()
+        angle = ((timeDelta/_12hoursInMilli)*360)
+    }
+    return angle
 }
 
 /*

@@ -32,6 +32,15 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
         get() {
             return  _unlockCount
         }
+    var isAfter12Am = Calendar.getInstance().timeInMillis>=getToday12AmInMilli()
+
+    private val _unlockEvents=if(isAfter12Am){ database.getAllUnlcoksFromTime(getToday12AmInMilli()) }
+                            else{ database.getAllUnlcoksFromTime(getCurrentDateInMilli()) }
+
+    val unlockEvents : LiveData<List<UnlockEvent>>
+        get() {
+            return  _unlockEvents
+        }
 
     //@SuppressLint("StaticFieldLeak")
     //private lateinit var mService :MyTestService
@@ -71,7 +80,6 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
         _intent.action = STOP_MY_SERVICE
         context.stopService(_intent)
     }
-
 
 
 

@@ -3,6 +3,7 @@ package millich.michael.bordcasttest.home
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +16,11 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.snackbar.Snackbar
 import millich.michael.bordcasttest.R
+import millich.michael.bordcasttest.background.calculateAngle
+import millich.michael.bordcasttest.background.getToday12AmInMilli
 import millich.michael.bordcasttest.databinding.HomeFragmentBinding
 import millich.michael.bordcasttest.databse.UnlockDatabase
+import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -50,39 +54,61 @@ class HomeFragment : Fragment() {
             this.context?.let { it1 -> Snackbar.make(it1,it,"Made stop",Snackbar.LENGTH_SHORT).show() }
             viewModel.stop()
         }
+        if(viewModel.isAfter12Am)
+            binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
+        var count =1
+        for (event in binding.viewModelTest.unlockEvents.value!!)
+        {
+            Log.i("Test","count = $count and the eventId =${event.eventId}")
+            count++
+        }
 
-        val testImageView: ImageView = ImageView(context)
-        testImageView.setImageResource(R.drawable.ic_dot)
-        testImageView.id = R.drawable.ic_dot+20
+        createTimeTags(binding,viewModel)
 
+        binding.lifecycleOwner = this
+        return binding.root
+    }
+
+
+    private fun createTimeTags(binding : HomeFragmentBinding, homeViewModel: HomeViewModel) {
         val scale = context?.resources?.displayMetrics?.density ?:0f
-        val r : Float =  (311/2) *scale +0.5f
-        val angle1 =330f
-        val angle = ((90-angle1) *0.017453).toFloat()
+        val eventList = homeViewModel.unlockEvents.value
+        val r : Float =  (311/2) *scale +0.5f // DEVELOPING STAGE - 311 = Diameter, have to find a better way to get the diameter
+
+        if (eventList != null) {
+            var count =1
+            for(event in eventList){
+                Log.i("Test","count = $count and the eventId =${event.eventId}")
+                count++
+                val testImageView: ImageView = ImageView(context)
+                testImageView.setImageResource(R.drawable.ic_dot)
+                val angle1 = calculateAngle(event.eventTime)
+                val angle = ((90-angle1) *0.017453).toFloat() // 0.017453 = 1 degree to radians
+                val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
+                imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
+                testImageView.layoutParams = imageParameters
+                testImageView.translationX = r * cos(angle)
+                testImageView.translationY = -r * sin(angle)
+                testImageView.rotation =  angle1
+                binding.relativeLayoutTest.addView(testImageView)
+            }
+        }
+        /*val testImageView: ImageView = ImageView(context)
+        testImageView.setImageResource(R.drawable.ic_dot)
+        testImageView.id = binding.analogClockView.id +1
+
+
+
+        val angle1 = calculateAngle(Calendar.getInstance().timeInMillis)
+        val angle = ((90-angle1) *0.017453).toFloat() // 0.017453 = 1 degree to radians
         val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
         imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
         testImageView.layoutParams = imageParameters
         testImageView.translationX = r * cos(angle)
         testImageView.translationY = -r * sin(angle)
         testImageView.rotation =  angle1
-        binding.relativeLayoutTest.addView(testImageView)
+        binding.relativeLayoutTest.addView(testImageView)*/
 
-        /*val constraintSet : ConstraintSet = ConstraintSet()
-        constraintSet.clone(binding.constraintLayout)
-        constraintSet.connect(testImageView.id,ConstraintSet.START,binding.analogClockView.id,ConstraintSet.START)
-        constraintSet.connect(testImageView.id,ConstraintSet.END,binding.analogClockView.id,ConstraintSet.END)
-        constraintSet.connect(testImageView.id,ConstraintSet.TOP,binding.analogClockView.id,ConstraintSet.TOP)
-        constraintSet.connect(testImageView.id,ConstraintSet.BOTTOM,binding.analogClockView.id,ConstraintSet.BOTTOM)
-        constraintSet.applyTo(binding.constraintLayout)*/
-
-
-        binding.lifecycleOwner = this
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        //viewModel start the service automaticaly once the view was created
-        super.onViewCreated(view, savedInstanceState)
     }
 
 }
