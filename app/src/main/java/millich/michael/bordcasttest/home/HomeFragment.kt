@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
     companion object {
         fun newInstance() = HomeFragment()
     }
-
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +44,7 @@ class HomeFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val databaseDAO = UnlockDatabase.getInstance(application).unlockDatabaseDAO
         val viewModelFactory = HomeViewModelFactory(application,databaseDAO)
-        val viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this,viewModelFactory).get(HomeViewModel::class.java)
         binding.viewModelTest=viewModel
         binding.buttonStartService.setOnClickListener{
             this.context?.let { it1 -> Snackbar.make(it1,it,"Made start",Snackbar.LENGTH_SHORT).show() }
@@ -56,12 +56,7 @@ class HomeFragment : Fragment() {
         }
         if(viewModel.isAfter12Am)
             binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
-        var count =1
-        for (event in binding.viewModelTest.unlockEvents.value!!)
-        {
-            Log.i("Test","count = $count and the eventId =${event.eventId}")
-            count++
-        }
+
 
         createTimeTags(binding,viewModel)
 
@@ -69,6 +64,16 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        var count =1
+        Log.i("Test","UnlockList = ${viewModel.testEvents.toString()}")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("Test","UnlockList = ${viewModel.testEvents.toString()}")
+    }
 
     private fun createTimeTags(binding : HomeFragmentBinding, homeViewModel: HomeViewModel) {
         val scale = context?.resources?.displayMetrics?.density ?:0f

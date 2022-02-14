@@ -7,10 +7,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import millich.michael.bordcasttest.background.*
@@ -19,7 +16,6 @@ import millich.michael.bordcasttest.databse.UnlockEvent
 import java.util.*
 
 class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : AndroidViewModel(application) {
-    lateinit var _intent : Intent
     @SuppressLint("StaticFieldLeak")
     private val context = getApplication<Application>().applicationContext
 
@@ -41,6 +37,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
         get() {
             return  _unlockEvents
         }
+     var testEvents : List<UnlockEvent> = listOf()
 
     //@SuppressLint("StaticFieldLeak")
     //private lateinit var mService :MyTestService
@@ -63,12 +60,16 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
     }
 
     init {
+        viewModelScope.launch {
+            testEvents=if(isAfter12Am){ database.getAllUnlcoksFromTimeNoLiveData(getToday12AmInMilli()) }
+            else{ database.getAllUnlcoksFromTimeNoLiveData(getCurrentDateInMilli()) }
+        }
         _buttonsVisible.value=false
         start()
     }
     fun start(){
         _buttonsVisible.value=true
-        _intent = Intent(context, MyTestService::class.java)
+        val _intent = Intent(context, MyTestService::class.java)
         _intent.action = START_MY_SERVICE
         context.startForegroundService(_intent)
         Intent(context,MyTestService::class.java).also { intent -> context.bindService(intent,connection,0) }
@@ -76,7 +77,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
     fun stop(){
         context.unbindService(connection)
         _buttonsVisible.value =false
-        _intent = Intent(context, MyTestService::class.java)
+        val _intent = Intent(context, MyTestService::class.java)
         _intent.action = STOP_MY_SERVICE
         context.stopService(_intent)
     }
