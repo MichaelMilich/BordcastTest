@@ -28,6 +28,12 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
         get() {
             return  _unlockCount
         }
+    private val _lastUnlock = database.getLastUnlockLiveData()
+    val lastUnlock :LiveData<UnlockEvent>
+    get() {
+        return _lastUnlock
+    }
+    val lastunlockTime : LiveData<String> = Transformations.map( _lastUnlock , {user -> formatDateFromMillisecondsLong(user.eventTime)})
     var isAfter12Am = Calendar.getInstance().timeInMillis>=getToday12AmInMilli()
 
     private val _unlockEvents=if(isAfter12Am){ database.getAllUnlcoksFromTime(getToday12AmInMilli()) }

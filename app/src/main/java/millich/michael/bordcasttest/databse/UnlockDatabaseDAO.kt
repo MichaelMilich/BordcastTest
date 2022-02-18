@@ -51,6 +51,9 @@ interface UnlockDatabaseDAO {
     @Query("SELECT * FROM unlock_event_table ORDER BY eventId DESC LIMIT 1")
     suspend fun getLastUnlock(): UnlockEvent?
 
+    @Query("SELECT * FROM unlock_event_table ORDER BY eventId DESC LIMIT 1")
+     fun getLastUnlockLiveData(): LiveData<UnlockEvent>
+
     /**
      * Selects and returns an unlock event with given eventId.
      */

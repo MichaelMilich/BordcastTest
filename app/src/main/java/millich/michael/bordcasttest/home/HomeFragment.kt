@@ -73,6 +73,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var count =1
+
         Log.i("Test","onViewCreated UnlockList = ${viewModel.testEvents}")
     }
 
@@ -83,6 +84,8 @@ class HomeFragment : Fragment() {
     }
 
     private  fun createTimeTags(binding : HomeFragmentBinding, homeViewModel: HomeViewModel) {
+
+        /*
         viewLifecycleOwner.lifecycleScope.launch {
             val scale = context?.resources?.displayMetrics?.density ?: 0f
             val eventList = viewModel.testEvents
@@ -124,7 +127,7 @@ class HomeFragment : Fragment() {
         testImageView.translationY = -r * sin(angle)
         testImageView.rotation =  angle1
         binding.relativeLayoutTest.addView(testImageView)*/
-
+        */
     }
 
 }
