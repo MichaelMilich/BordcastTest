@@ -61,7 +61,9 @@ class HomeFragment : Fragment() {
         if(viewModel.isAfter12Am)
             binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
 
-
+        val adapter = UnlockEventAdapter()
+        binding.unlockList.adapter=adapter
+        viewModel.unlockEvents.observe(viewLifecycleOwner, androidx.lifecycle.Observer { it?.let { adapter.data=it } })
 
 
         binding.lifecycleOwner = this

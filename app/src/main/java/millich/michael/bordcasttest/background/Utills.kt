@@ -14,6 +14,8 @@
 package millich.michael.bordcasttest.background
 
 import android.util.Log
+import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -92,3 +94,7 @@ fun getUnlockCountToday(unlocksToday: LiveData<List<UnlockEvent>>) : Int
 
 }
 */
+
+class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView){
+
+}
