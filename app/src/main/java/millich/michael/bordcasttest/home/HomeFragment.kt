@@ -1,6 +1,7 @@
 package millich.michael.bordcasttest.home
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,7 @@ import millich.michael.bordcasttest.background.calculateAngle
 import millich.michael.bordcasttest.background.getToday12AmInMilli
 import millich.michael.bordcasttest.databinding.HomeFragmentBinding
 import millich.michael.bordcasttest.databse.UnlockDatabase
+import millich.michael.bordcasttest.databse.UnlockEvent
 import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
@@ -34,6 +36,8 @@ class HomeFragment : Fragment() {
     }
     private lateinit var viewModel: HomeViewModel
     private lateinit var binder:HomeFragmentBinding
+
+    private  var radius:Float =(311 / 2).toFloat()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,12 +67,31 @@ class HomeFragment : Fragment() {
 
         val adapter = UnlockEventAdapter()
         binding.unlockList.adapter=adapter
-        viewModel.unlockEvents.observe(viewLifecycleOwner, androidx.lifecycle.Observer { it?.let { adapter.data=it } })
+        binder=binding
+
+        val vto =binding.relativeLayoutTest.viewTreeObserver
+        vto.addOnGlobalLayoutListener { object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.relativeLayoutTest.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                radius = (binding.relativeLayoutTest.measuredWidth /2).toFloat()
+            }
+        } }
+
+        viewModel.unlockEvents.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            it?.let {
+                if(it.isNotEmpty()) {
+                    val firstId = it[it.size - 1].eventId - 1
+                    for (event in it)
+                        event.eventId -= firstId
+
+                    createTimeTags(binder,it)
+                }
+                adapter.submitList(it)
+            }
+        })
 
 
         binding.lifecycleOwner = this
-        binder=binding
-        createTimeTags(binding,viewModel)
         return binding.root
     }
 
@@ -82,18 +105,16 @@ class HomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.i("Test","onStart UnlockList = ${viewModel.testEvents}")
-        createTimeTags(binder,viewModel)
     }
 
-    private  fun createTimeTags(binding : HomeFragmentBinding, homeViewModel: HomeViewModel) {
+    private  fun createTimeTags(binding : HomeFragmentBinding, eventList: List<UnlockEvent>) {
 
-        /*
+
         viewLifecycleOwner.lifecycleScope.launch {
             val scale = context?.resources?.displayMetrics?.density ?: 0f
-            val eventList = viewModel.testEvents
             Log.i("Test", "createTimeTags eventList = $eventList")
             val r: Float =
-                (311 / 2) * scale + 0.5f // DEVELOPING STAGE - 311 = Diameter, have to find a better way to get the diameter
+                radius * scale + 0.5f // DEVELOPING STAGE - 311 = Diameter, have to find a better way to get the diameter
 
             var count = 1
             for (event in eventList) {
@@ -129,7 +150,7 @@ class HomeFragment : Fragment() {
         testImageView.translationY = -r * sin(angle)
         testImageView.rotation =  angle1
         binding.relativeLayoutTest.addView(testImageView)*/
-        */
+
     }
 
 }
