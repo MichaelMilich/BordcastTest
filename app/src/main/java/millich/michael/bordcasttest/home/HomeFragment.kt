@@ -37,7 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var binder:HomeFragmentBinding
 
-    private  var radius:Float =(311 / 2).toFloat()
+    private  var radius:Float =(264 / 2).toFloat()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,13 +69,6 @@ class HomeFragment : Fragment() {
         binding.unlockList.adapter=adapter
         binder=binding
 
-        val vto =binding.relativeLayoutTest.viewTreeObserver
-        vto.addOnGlobalLayoutListener { object: ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                binding.relativeLayoutTest.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                radius = (binding.relativeLayoutTest.measuredWidth /2).toFloat()
-            }
-        } }
 
         viewModel.unlockEvents.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             it?.let {
@@ -95,62 +88,33 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        var count =1
-
-        Log.i("Test","onViewCreated UnlockList = ${viewModel.testEvents}")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("Test","onStart UnlockList = ${viewModel.testEvents}")
-    }
 
     private  fun createTimeTags(binding : HomeFragmentBinding, eventList: List<UnlockEvent>) {
+        viewModel.count++
+        Log.i("COUNT","count is ${viewModel.count}")
+        if (viewModel.count<2) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                radius = (binding.relativeLayoutTest.width / 2).toFloat()
+                val r: Float =
+                    radius + 0.5f
 
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            val scale = context?.resources?.displayMetrics?.density ?: 0f
-            Log.i("Test", "createTimeTags eventList = $eventList")
-            val r: Float =
-                radius * scale + 0.5f // DEVELOPING STAGE - 311 = Diameter, have to find a better way to get the diameter
-
-            var count = 1
-            for (event in eventList) {
-                Log.i("Test", "count = $count and the eventId =${event.eventId}")
-                count++
-                val testImageView: ImageView = ImageView(context)
-                testImageView.setImageResource(R.drawable.ic_dot)
-                val angle1 = calculateAngle(event.eventTime)
-                val angle =
-                    ((90 - angle1) * 0.017453).toFloat() // 0.017453 = 1 degree to radians
-                val imageParameters: RelativeLayout.LayoutParams =
-                    RelativeLayout.LayoutParams(40, 40)
-                imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                testImageView.layoutParams = imageParameters
-                testImageView.translationX = r * cos(angle)
-                testImageView.translationY = -r * sin(angle)
-                testImageView.rotation = angle1
-                binding.relativeLayoutTest.addView(testImageView)
+                for (event in eventList) {
+                    val testImageView: ImageView = ImageView(context)
+                    testImageView.setImageResource(R.drawable.ic_dot)
+                    val angle1 = calculateAngle(event.eventTime)
+                    val angle =
+                        ((90 - angle1) * 0.017453).toFloat() // 0.017453 = 1 degree to radians
+                    val imageParameters: RelativeLayout.LayoutParams =
+                        RelativeLayout.LayoutParams(40, 40)
+                    imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
+                    testImageView.layoutParams = imageParameters
+                    testImageView.translationX = r * cos(angle)
+                    testImageView.translationY = -r * sin(angle)
+                    testImageView.rotation = angle1
+                    binding.relativeLayoutTest.addView(testImageView)
+                }
             }
         }
-        /*val testImageView: ImageView = ImageView(context)
-        testImageView.setImageResource(R.drawable.ic_dot)
-        testImageView.id = binding.analogClockView.id +1
-
-
-
-        val angle1 = calculateAngle(Calendar.getInstance().timeInMillis)
-        val angle = ((90-angle1) *0.017453).toFloat() // 0.017453 = 1 degree to radians
-        val imageParameters : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(40,40)
-        imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE)
-        testImageView.layoutParams = imageParameters
-        testImageView.translationX = r * cos(angle)
-        testImageView.translationY = -r * sin(angle)
-        testImageView.rotation =  angle1
-        binding.relativeLayoutTest.addView(testImageView)*/
-
     }
 
 }

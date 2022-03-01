@@ -44,6 +44,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
             return  _unlockEvents
         }
      var testEvents : List<UnlockEvent> = listOf()
+    var count =0
 
     //@SuppressLint("StaticFieldLeak")
     //private lateinit var mService :MyTestService
