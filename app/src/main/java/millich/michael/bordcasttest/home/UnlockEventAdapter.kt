@@ -1,17 +1,10 @@
 package millich.michael.bordcasttest.home
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import millich.michael.bordcasttest.R
-import millich.michael.bordcasttest.background.TextItemViewHolder
-import millich.michael.bordcasttest.background.formatDateFromMillisecondsLong
 import millich.michael.bordcasttest.databinding.ListItemUnlockEventBinding
 import millich.michael.bordcasttest.databse.UnlockEvent
 

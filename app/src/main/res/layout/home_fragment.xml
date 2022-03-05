@@ -42,50 +42,8 @@
             app:layout_constraintStart_toEndOf="@+id/button_start_service"
             app:layout_constraintTop_toTopOf="@+id/button_start_service" />
 
-        <!--
-        <RelativeLayout
-            android:id="@+id/relative_layout_test"
-            android:layout_width="264dp"
-            android:layout_height="316dp"
-            android:background="#B7983A"
-            app:layout_constraintBottom_toTopOf="@+id/button_start_service"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.16000003">
-
-
-
-            <ImageView
-                android:id="@+id/analog_clock_view"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerInParent="true"
-                android:contentDescription="@string/analog_clock_content_description"
-                app:srcCompat="@drawable/ic_analog_clock_0_12" />
-
-            <TextView
-                android:id="@+id/unlock_count_text_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@{viewModelTest.unlockCount.toString()}"
-                android:textSize="40sp" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/unlock_count_text_box"
-                android:layout_centerInParent="true"
-                android:text="@{viewModelTest.lastunlockTime}" />
-
-
-        </RelativeLayout> -->
-
-
         <millich.michael.bordcasttest.home.ClockView
-            android:id="@+id/relative_layout_test"
+            android:id="@+id/clock_view"
             android:layout_width="264dp"
             android:layout_height="316dp"
             app:layout_constraintBottom_toTopOf="@+id/button_start_service"
@@ -104,9 +62,9 @@
             android:layout_marginBottom="30dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/button_start_service"
-            app:layout_constraintEnd_toEndOf="@+id/relative_layout_test"
-            app:layout_constraintStart_toStartOf="@+id/relative_layout_test"
-            app:layout_constraintTop_toBottomOf="@+id/relative_layout_test" />
+            app:layout_constraintEnd_toEndOf="@+id/clock_view"
+            app:layout_constraintStart_toStartOf="@+id/clock_view"
+            app:layout_constraintTop_toBottomOf="@+id/clock_view" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

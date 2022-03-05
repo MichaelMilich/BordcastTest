@@ -14,6 +14,8 @@
 package millich.michael.bordcasttest.background
 
 import android.util.Log
+import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
@@ -88,13 +90,13 @@ fun calculateAngle(timeTag :Long) : Float {
     return angle
 }
 
-/*
-fun getUnlockCountToday(unlocksToday: LiveData<List<UnlockEvent>>) : Int
-{
-
-}
-*/
-
-class TextItemViewHolder(val textView: TextView): RecyclerView.ViewHolder(textView){
-
+inline fun View.afterMeasured(crossinline f: View.() -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            if (measuredHeight > 0 && measuredWidth > 0) {
+                viewTreeObserver.removeOnGlobalLayoutListener(this)
+                f()
+            }
+        }
+    })
 }

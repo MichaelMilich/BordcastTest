@@ -35,6 +35,5 @@ fun ImageView.setTagView(item: UnlockEvent, parentWidth: Float){
 @BindingAdapter("ViewModel")
 fun ClockView.setViewModel(viewModel: HomeViewModel){
     binding.viewModelClock=viewModel
-    Log.i("Test","Binding unlock count is = ${binding.viewModelClock?.count}")
     onBind()
 }

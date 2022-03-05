@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import millich.michael.bordcasttest.R
+import millich.michael.bordcasttest.background.afterMeasured
 import millich.michael.bordcasttest.background.calculateAngle
 import millich.michael.bordcasttest.background.getToday12AmInMilli
 import millich.michael.bordcasttest.databinding.HomeFragmentBinding
@@ -31,14 +32,9 @@ import kotlin.math.sin
 
 class HomeFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = HomeFragment()
-    }
     private lateinit var viewModel: HomeViewModel
     private lateinit var binder:HomeFragmentBinding
-
-    private  var radius:Float =(264 / 2).toFloat()
-    private var viewList: List<ImageView> = mutableListOf()
+    private lateinit var clockView: ClockView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,45 +78,21 @@ class HomeFragment : Fragment() {
             }
         })
 
-        binding.relativeLayoutTest.binding.lifecycleOwner=this
+        binding.clockView.binding.lifecycleOwner=this
         binding.lifecycleOwner = this
         binder=binding
+        clockView=binder.clockView
         return binding.root
     }
 
     private fun callClockViewTags(eventList: List<UnlockEvent>){
         viewLifecycleOwner.lifecycleScope.launch {
-            binder.relativeLayoutTest.createTimeTags(eventList)
-        }
-    }
-
-    private  fun createTimeTags(binding : HomeFragmentBinding, eventList: List<UnlockEvent>) {
-        viewModel.count++
-        Log.i("COUNT","count is ${viewModel.count}")
-        if (viewModel.count<2) {
-            viewLifecycleOwner.lifecycleScope.launch {
-                radius = (binding.relativeLayoutTest.width / 2).toFloat()
-                Log.i("width","radius is $radius")
-                val r: Float =
-                    radius + 0.5f
-
-                for (event in eventList) {
-                    val testImageView: ImageView = ImageView(context)
-                    testImageView.setImageResource(R.drawable.ic_dot)
-                    val angle1 = calculateAngle(event.eventTime)
-                    val angle =
-                        ((90 - angle1) * 0.017453).toFloat() // 0.017453 = 1 degree to radians
-                    val imageParameters: RelativeLayout.LayoutParams =
-                        RelativeLayout.LayoutParams(40, 40)
-                    imageParameters.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE)
-                    testImageView.layoutParams = imageParameters
-                    testImageView.translationX = r * cos(angle)
-                    testImageView.translationY = -r * sin(angle)
-                    testImageView.rotation = angle1
-                    binding.relativeLayoutTest.addView(testImageView)
-                }
+            clockView.afterMeasured {
+                Log.i("Test","after Measured width of clock_view is =${this.width}")
+                clockView.createTimeTags(eventList,(width/2).toFloat()+0.5f)
             }
         }
     }
+
 
 }
