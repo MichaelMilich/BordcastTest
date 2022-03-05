@@ -37,10 +37,7 @@ object UnlockBroadcastReceiver : BroadcastReceiver() {
                 database.Insert(unlockEvent)
                  val newUnlock = database.getLastUnlock()
                 val unlockCount =database.getTodayUnlocksCountAfterTimeNoLiveData(getCurrentDateInMilli())
-                Log.i("Test", " ${newUnlock!!.eventId}  unlocks today , last time at = ${formatDateFromMillisecondsLong(
-                    newUnlock.eventTime)}")
-                Log.i("Test", " $unlockCount  unlocks today ")
-               showNotification(context," $unlockCount  unlocks today" ,"last time at = ${formatDateFromMillisecondsLong(newUnlock.eventTime)}")
+               showNotification(context," $unlockCount  unlocks today" ,"last time at = ${formatDateFromMillisecondsLong(newUnlock!!.eventTime)}")
             }
         }
 

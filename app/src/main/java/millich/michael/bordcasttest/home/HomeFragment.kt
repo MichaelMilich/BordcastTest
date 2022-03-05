@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
     private lateinit var binder:HomeFragmentBinding
 
     private  var radius:Float =(264 / 2).toFloat()
+    private var viewList: List<ImageView> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,12 +63,10 @@ class HomeFragment : Fragment() {
             this.context?.let { it1 -> Snackbar.make(it1,it,"Made stop",Snackbar.LENGTH_SHORT).show() }
             viewModel.stop()
         }
-        if(viewModel.isAfter12Am)
-            binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
 
         val adapter = UnlockEventAdapter()
         binding.unlockList.adapter=adapter
-        binder=binding
+
 
 
         viewModel.unlockEvents.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
@@ -77,17 +76,23 @@ class HomeFragment : Fragment() {
                     for (event in it)
                         event.eventId -= firstId
 
-                    createTimeTags(binder,it)
+                    callClockViewTags(it)
                 }
                 adapter.submitList(it)
             }
         })
 
-
+        binding.relativeLayoutTest.binding.lifecycleOwner=this
         binding.lifecycleOwner = this
+        binder=binding
         return binding.root
     }
 
+    private fun callClockViewTags(eventList: List<UnlockEvent>){
+        viewLifecycleOwner.lifecycleScope.launch {
+            binder.relativeLayoutTest.createTimeTags(eventList)
+        }
+    }
 
     private  fun createTimeTags(binding : HomeFragmentBinding, eventList: List<UnlockEvent>) {
         viewModel.count++
@@ -95,6 +100,7 @@ class HomeFragment : Fragment() {
         if (viewModel.count<2) {
             viewLifecycleOwner.lifecycleScope.launch {
                 radius = (binding.relativeLayoutTest.width / 2).toFloat()
+                Log.i("width","radius is $radius")
                 val r: Float =
                     radius + 0.5f
 
