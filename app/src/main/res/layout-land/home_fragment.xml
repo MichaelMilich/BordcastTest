@@ -9,10 +9,11 @@
             name="viewModelTest"
             type="millich.michael.bordcasttest.home.HomeViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/constraint_layout">
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/button_start_service"
@@ -25,6 +26,8 @@
             android:text="@string/start_service"
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_stop_service"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
@@ -32,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="63dp"
             android:layout_margin="@dimen/buttons_margin"
-            android:layout_marginStart="44dp"
             android:background="@color/purple_500"
             android:enabled="@{viewModelTest.buttonVisible}"
             android:padding="16dp"
@@ -40,6 +42,7 @@
             android:textColor="#fff"
             app:layout_constraintBottom_toBottomOf="@+id/button_start_service"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/button_start_service"
             app:layout_constraintTop_toTopOf="@+id/button_start_service" />
 
@@ -47,28 +50,29 @@
             android:id="@+id/clock_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:ViewModel="@{viewModelTest}"
             app:layout_constraintBottom_toTopOf="@+id/button_start_service"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/unlock_list"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.226"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintDimensionRatio="1:1"
-            app:ViewModel="@{viewModelTest}"/>
+            app:layout_constraintWidth_percent="0.3">
+
+        </millich.michael.bordcasttest.home.ClockView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/unlock_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="32dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@+id/button_start_service"
-            app:layout_constraintEnd_toEndOf="@+id/clock_view"
-            app:layout_constraintStart_toStartOf="@+id/clock_view"
-            app:layout_constraintTop_toBottomOf="@+id/clock_view" />
-
+            app:layout_constraintBottom_toBottomOf="@+id/clock_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toEndOf="@+id/clock_view"
+            app:layout_constraintTop_toTopOf="@+id/clock_view" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
