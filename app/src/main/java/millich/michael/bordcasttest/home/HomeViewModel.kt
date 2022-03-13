@@ -34,9 +34,13 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
         return _lastUnlock
     }
     val lastunlockTime : LiveData<String> = Transformations.map( _lastUnlock , {user -> formatDateFromMillisecondsLong(user.eventTime)})
-    var isAfter12Am = Calendar.getInstance().timeInMillis>=getToday12AmInMilli()
+    private val _isAfter12Am : MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value=Calendar.getInstance().timeInMillis>getToday12AmInMilli() }
+    val isAfter12Am : MutableLiveData<Boolean>
+    get() {
+        return _isAfter12Am
+    }
 
-    private val _unlockEvents=if(isAfter12Am){ database.getAllUnlcoksFromTime(getToday12AmInMilli()) }
+    private val _unlockEvents=if(isAfter12Am.value!!){ database.getAllUnlcoksFromTime(getToday12AmInMilli()) }
                             else{ database.getAllUnlcoksFromTime(getCurrentDateInMilli()) }
 
     val unlockEvents : LiveData<List<UnlockEvent>>
@@ -68,7 +72,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
 
     init {
         viewModelScope.launch {
-            testEvents=if(isAfter12Am){ database.getAllUnlcoksFromTimeNoLiveData(getToday12AmInMilli()) }
+            testEvents=if(isAfter12Am.value!!){ database.getAllUnlcoksFromTimeNoLiveData(getToday12AmInMilli()) }
             else{ database.getAllUnlcoksFromTimeNoLiveData(getCurrentDateInMilli()) }
         }
         _buttonsVisible.value=false

@@ -61,32 +61,17 @@ class ClockView : RelativeLayout {
 
     fun onBind() {
         viewModel = binding.viewModelClock!!
-        if (viewModel.isAfter12Am)
+        if (viewModel.isAfter12Am.value!!)
             binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
+        viewModel.isAfter12Am.observe(binding.lifecycleOwner!!,androidx.lifecycle.Observer{
+            checkClock()
+        })
     }
-     fun createTimeTags( eventList: List<UnlockEvent>) {
-        val radius = (binding.relativeLayout.width / 2).toFloat() + 0.5f // i am adding a 0.5 pixel just so the tags will always be alittle far, also width is int, so incase it is not devided by 2, we are correct
-        Log.i("Test", "radius is $radius")
-        for (event in eventList) {
-            val key = event.eventId
-            if (!eventViewMap.containsKey(key)) {
-                val testImageView = ImageView(context)
-                testImageView.setImageResource(R.drawable.ic_dot)
-                val angle1 = calculateAngle(event.eventTime)
-                val angle =
-                    ((90 - angle1) * 0.017453).toFloat() // 0.017453 = 1 degree to radians
-                val imageParameters =
-                    LayoutParams(40, 40)
-                imageParameters.addRule(CENTER_IN_PARENT, TRUE)
-                testImageView.layoutParams = imageParameters
-                testImageView.translationX = radius * cos(angle)
-                testImageView.translationY = -radius * sin(angle)
-                testImageView.rotation = angle1
-                eventViewMap[key] = testImageView
-                binding.relativeLayout.addView(testImageView)
-            }
-        }
-
+    fun checkClock(){
+        if (viewModel.isAfter12Am.value!!)
+            binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_12_24)
+        else
+            binding.analogClockView.setImageResource(R.drawable.ic_analog_clock_0_12)
     }
     fun createTimeTags( eventList: List<UnlockEvent>,radius: Float) {
         Log.i("Test", "radius is $radius")
