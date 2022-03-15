@@ -33,7 +33,7 @@ class HomeViewModel(val database: UnlockDatabaseDAO,application: Application) : 
     get() {
         return _lastUnlock
     }
-    val lastunlockTime : LiveData<String> = Transformations.map( _lastUnlock , {user -> formatDateFromMillisecondsLong(user.eventTime)})
+    val lastUnlockTime : LiveData<String> = Transformations.map( _lastUnlock , {user -> formatDateFromMillisecondsLong(user.eventTime)})
     private val _isAfter12Am : MutableLiveData<Boolean> = MutableLiveData<Boolean>().also { it.value=Calendar.getInstance().timeInMillis>getToday12AmInMilli() }
     val isAfter12Am : MutableLiveData<Boolean>
     get() {

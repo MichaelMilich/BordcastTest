@@ -88,8 +88,8 @@ class HomeFragment : Fragment() {
     private fun callClockViewTags(eventList: List<UnlockEvent>){
         viewLifecycleOwner.lifecycleScope.launch {
             clockView.afterMeasured {
-                Log.i("Test","after Measured width of clock_view is =${this.width}")
-                clockView.createTimeTags(eventList,(width/2).toFloat()+0.5f)
+                Log.i("Test","after Measured width of clock_view is =${clockView.binding.analogClockView.width}")
+                clockView.createTimeTags(eventList,(clockView.binding.analogClockView.width/2).toFloat()+0.5f)
             }
         }
     }
